@@ -29,3 +29,18 @@ Outputs (`output/cv_results.csv`, `output/cars_clean.csv`, and residual plots
 in `output/residual_plots/<model>/<predictor>.png`) are written to the
 git-ignored `output/` directory. Residual plots show in-sample residuals of each
 final fit against each predictor on its model scale (boxplots for factors).
+
+### OLS full selection
+
+`R/run_full_selection_ols.R` fits all 2^8 = 256 OLS subsets (brand always in;
+the fuel indicators enter or leave together) and ranks them by 5-fold CV RMSE
+on the same brand-stratified folds as above. Each model is fitted independently,
+e.g. as one slurm array task:
+
+```sh
+Rscript R/run_full_selection_ols.R fit <id>   # id in 1..256
+Rscript R/run_full_selection_ols.R combine    # -> output/full_selection/ols.csv
+```
+
+`ols.csv` has one row per model (best first): `rmse`, then one TRUE/FALSE
+column per optional predictor.
