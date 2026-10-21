@@ -17,7 +17,7 @@ cat(sprintf("Cleaned data: %d cars, %d brands\n\n", nrow(cars),
 
 fitters <- list(
   ols    = fit_ols,
-  lasso  = function(tr) fit_elasticnet(tr, alphas = 0, K = K_INNER,
+  lasso  = function(tr) fit_elasticnet(tr, alphas = 1, K = K_INNER,
                                        seed = SEED),
   spline = function(tr) fit_spline(tr, K = K_INNER, seed = SEED)
 )
@@ -52,3 +52,31 @@ print(spline_tuning$df_curve, row.names = FALSE, digits = 3)
 dir.create("output", showWarnings = FALSE)
 write.csv(summary_tbl, file.path("output", "cv_results.csv"), row.names = FALSE)
 write.csv(cars, file.path("output", "cars_clean.csv"), row.names = FALSE)
+
+# Residual plots: in-sample residuals of each final fit against each predictor
+# on the scale it enters the model (boxplots for factors).
+plot_vars <- c(continuous_vars, other_vars)
+feats <- add_features(cars)
+for (m in names(final)) {
+  plot_dir <- file.path("output", "residual_plots", m)
+  dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
+  resid <- cars$log_price - final[[m]](cars)
+  for (v in plot_vars) {
+    png(file.path(plot_dir, paste0(v, ".png")), width = 700, height = 500)
+    x <- feats[[v]]
+    main <- sprintf("%s: residuals vs %s", m, v)
+    if (is.factor(x)) {
+      par(mar = c(10, 4, 4, 1))  # room for rotated level labels
+      boxplot(resid ~ x, main = main, xlab = "", ylab = "Residual (log price)",
+              las = 2)
+    } else {
+      plot(x, resid, main = main, xlab = v, ylab = "Residual (log price)",
+           pch = 16, col = adjustcolor("black", 0.4))
+      lines(lowess(x, resid), col = "red", lwd = 2)
+    }
+    abline(h = 0, lty = 2)
+    dev.off()
+  }
+}
+cat(sprintf("\nResidual plots written to %s\n",
+            file.path("output", "residual_plots")))
