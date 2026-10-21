@@ -13,4 +13,4 @@
 - Always ask clarifying questions instead of guessing
 - If you post a comment on a github issue, do not repeat it in the chat session. Summarize long github comments with main points only in the chat session.
 ## Test runs
-If a github issue is labeled with `test-run`, perform the indicated task but append "test" to the beginning of the branch for changes made under the issue and do not open a PR. Outputs should be routed to `test_outputs/`, which is gitignored. If the job requires slurm jobs on wright, run only a small enough subset to prove that the functionality works. 
+If a github issue is labeled with `test-run`, perform the indicated task but append "test" to the beginning of the branch for changes made under the issue and do not open a PR. Outputs should be routed to `test_output/`, which is gitignored. If the job requires slurm jobs on wright, run only a small enough subset to prove that the functionality works. 
