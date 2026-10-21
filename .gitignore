@@ -1,3 +1,4 @@
 # local Claude Code settings and secrets
 .claude/**
 .env.local
+output/
