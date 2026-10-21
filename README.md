@@ -25,5 +25,7 @@ Models are compared by nested 5-fold cross-validated RMSE on log price.
 Rscript R/run_analysis.R   # run from the repo root; requires glmnet
 ```
 
-Outputs (`output/cv_results.csv`, `output/cars_clean.csv`) are written to the
-git-ignored `output/` directory.
+Outputs (`output/cv_results.csv`, `output/cars_clean.csv`, and residual plots
+in `output/residual_plots/<model>/<predictor>.png`) are written to the
+git-ignored `output/` directory. Residual plots show in-sample residuals of each
+final fit against each predictor on its model scale (boxplots for factors).
