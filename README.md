@@ -13,7 +13,8 @@ on the log scale makes errors relative rather than absolute.
 Models compared (in `R/`):
 
 - **OLS** on main effects
-- **LASSO / elastic net** (`glmnet`), with alpha and lambda chosen by CV
+- **LASSO** (`glmnet`, alpha = 1), with lambda chosen by CV. `fit_elasticnet()`
+  also supports tuning alpha over a grid, but the base analysis uses pure LASSO
 - **Natural splines** on the continuous predictors, with degrees of freedom chosen by CV
 
 Models are compared by nested 5-fold cross-validated RMSE on log price.
