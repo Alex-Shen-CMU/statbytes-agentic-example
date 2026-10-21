@@ -17,7 +17,6 @@ cat(sprintf("Cleaned data: %d cars, %d brands\n\n", nrow(cars),
 
 fitters <- list(
   ols    = fit_ols,
-  # PLANTED BUG (issue #7, demo): alphas = 0 runs ridge, not LASSO.
   lasso  = function(tr) fit_elasticnet(tr, alphas = 0, K = K_INNER,
                                        seed = SEED),
   spline = function(tr) fit_spline(tr, K = K_INNER, seed = SEED)
