@@ -10,4 +10,4 @@
 - one branch + PR per issue. Always make sure you are branching from up-to-date main
 - never force-push; never touch main
 - Always ask clarifying questions instead of guessing
-
+- If you post a comment on a github issue, do not repeat it in the chat session. Summarize with main points only in the session.
