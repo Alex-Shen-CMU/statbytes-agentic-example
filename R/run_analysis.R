@@ -17,7 +17,8 @@ cat(sprintf("Cleaned data: %d cars, %d brands\n\n", nrow(cars),
 
 fitters <- list(
   ols    = fit_ols,
-  lasso  = function(tr) fit_lasso(tr, K = K_INNER, seed = SEED),
+  lasso  = function(tr) fit_elasticnet(tr, alphas = 1, K = K_INNER,
+                                       seed = SEED),
   spline = function(tr) fit_spline(tr, K = K_INNER, seed = SEED)
 )
 
@@ -39,8 +40,7 @@ print(summary_tbl, row.names = FALSE, digits = 3)
 final <- lapply(fitters, function(f) f(cars))
 
 lasso_tuning <- attr(final$lasso, "tuning")
-cat(sprintf("\nLASSO/elastic net: alpha = %.2f, lambda = %.4g\n",
-            lasso_tuning$alpha, lasso_tuning$lambda))
+cat(sprintf("\nLASSO: lambda = %.4g\n", lasso_tuning$lambda))
 lasso_coef <- as.matrix(coef(attr(final$lasso, "fit"), s = "lambda.min"))
 cat(sprintf("  %d of %d coefficients nonzero\n", sum(lasso_coef != 0) - 1,
             nrow(lasso_coef) - 1))

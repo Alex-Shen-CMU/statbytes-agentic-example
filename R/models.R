@@ -37,12 +37,12 @@ fit_ols <- function(train) {
             fit = fit)
 }
 
-# --- LASSO / elastic net -----------------------------------------------------
+# --- Elastic net (LASSO when alphas = 1) -------------------------------------
 
 # lambda is chosen by cv.glmnet and alpha by an outer loop over `alphas`, both
 # using the same folds so the CV errors are comparable across alpha.
-fit_lasso <- function(train, alphas = c(1, 0.75, 0.5, 0.25), K = 5,
-                      seed = NULL) {
+fit_elasticnet <- function(train, alphas = c(1, 0.75, 0.5, 0.25), K = 5,
+                           seed = NULL) {
   tr <- add_features(train)
   f <- linear_formula()
   x <- model.matrix(f, tr)[, -1]
