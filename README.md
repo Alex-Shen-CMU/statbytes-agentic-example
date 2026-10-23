@@ -44,3 +44,64 @@ Rscript R/run_full_selection_ols.R combine    # -> output/full_selection/ols.csv
 
 `ols.csv` has one row per model (best first): `rmse`, then one TRUE/FALSE
 column per optional predictor.
+
+## Trying out the Claude Code workflow
+
+This repo is set up so that Claude Code picks up tasks from GitHub issues and
+answers with a branch and pull request (see `CLAUDE.md` for the full set of
+conventions it follows).
+
+### 1. Fork this repo
+
+If you want to tinker with this codebase, **fork it first** and work on your
+fork. The workflow opens branches and pull requests, and those should land on
+your copy, not on this one.
+
+### 2. Install the GitHub MCP server
+
+Claude uses the GitHub MCP server to read issues, post comments and open PRs.
+The server is already declared in `.mcp.json`, which reads your token from the
+`GITHUB_PAT` environment variable rather than storing it:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_PAT}" }
+    }
+  }
+}
+```
+
+1. Create a [GitHub personal access token](https://github.com/settings/personal-access-tokens)
+   with access to your fork (read/write on issues, pull requests and contents).
+2. Put the token in `.claude/settings.local.json` (git-ignored, so it never gets
+   committed), and enable the server:
+
+   ```json
+   {
+     "enabledMcpjsonServers": ["github"],
+     "env": { "GITHUB_PAT": "<your token>" }
+   }
+   ```
+
+3. Run `/mcp` inside Claude Code to check that `github` is connected.
+
+Do **not** add the server with something like
+`claude mcp add ... -H "Authorization: Bearer ghp_..."`: that puts the token in
+plaintext in your shell history and in Claude's config file.
+
+### 3. General workflow
+
+1. Fork the repo, then clone your fork locally.
+2. On your fork's GitHub page, describe a task in a new issue.
+3. In your local clone, launch `claude` (optionally inside a `tmux` session, so
+   it keeps running after you disconnect).
+4. Tell Claude: `work on issue <number>`.
+5. Wait for any clarifying questions and answer them. Then you can leave and come
+   back to a pull request, with progress updates posted as comments on the issue.
+
+Label an issue `test-run` to have Claude do a dry run: it works on a local
+`test-` branch, writes outputs to `test_output/`, and does not push or open a PR.
