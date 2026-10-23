@@ -1,6 +1,6 @@
 # Project: statbytes-agentic-example
 ## Cluster
-- ssh: `ssh ajshen@wright.hss.cmu.edu` (keys set up)
+- ssh to wright cluster: `ssh <user id>@wright.hss.cmu.edu`. Ask user for `<user id>` and ensure passwordless ssh is setup (never ask user for their password). User may not have wright account, so do not bring this up unless the user requests a heavy compute task. 
 - cluster runs slurm. Relevant partitions are `all` (low priority, pre-emptible) and `statds` (high priority, low capacity)
 - never run heavy jobs on hydra
 - do not commit slurm scripts
